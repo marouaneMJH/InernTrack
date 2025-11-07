@@ -11,29 +11,29 @@ class NotionSync:
 
     # utility
     def find_page_by_property(self, db_id, prop_name, prop_value, max_pages=50):
-        """Search for pages in a database by a specific property value."""
+        """Find pages in a database by property value."""
         try:
-            # Handle different property types
-            if prop_name == "Name" or "title" in prop_name.lower():
-                filter_body = {
+            if prop_name.lower() == "offer link" or "url" in prop_name.lower():
+                filter_config = {
                     "property": prop_name,
-                    "title": {"contains": prop_value}
-                }
-            elif "url" in prop_name.lower() or "link" in prop_name.lower():
-                filter_body = {
-                    "property": prop_name,
-                    "url": {"contains": prop_value}
+                    "url": {"equals": prop_value}
                 }
             else:
-                filter_body = {
+                filter_config = {
                     "property": prop_name,
                     "rich_text": {"contains": prop_value}
                 }
             
-            res = self.client.databases.query(
-                database_id=db_id, 
-                filter=filter_body, 
-                page_size=min(max_pages, 100)
+            # Use the request method directly
+            query_body = {
+                "filter": filter_config,
+                "page_size": min(max_pages, 100)
+            }
+            
+            res = self.client.request(
+                path=f"databases/{db_id}/query",
+                method="POST",
+                body=query_body
             )
             return res.get("results", [])
         except Exception as e:
@@ -55,9 +55,14 @@ class NotionSync:
             props["Description"] = {"rich_text":[{"text":{"content":description[:2000]}}]}
 
         try:
-            page = self.client.pages.create(
-                parent={"database_id": settings.DB_COMPANIES}, 
-                properties=props
+            page_data = {
+                "parent": {"database_id": settings.DB_COMPANIES},
+                "properties": props
+            }
+            page = self.client.request(
+                path="pages",
+                method="POST", 
+                body=page_data
             )
             logger.info("Created company: %s", company_name)
             return page
@@ -84,9 +89,14 @@ class NotionSync:
             props["Description"] = {"rich_text":[{"text":{"content": description_text}}]}
 
         try:
-            page = self.client.pages.create(
-                parent={"database_id": settings.DB_OFFERS}, 
-                properties=props
+            page_data = {
+                "parent": {"database_id": settings.DB_OFFERS},
+                "properties": props
+            }
+            page = self.client.request(
+                path="pages",
+                method="POST",
+                body=page_data
             )
             logger.info("Created offer: %s at %s", job["title"], job["company"])
             return page

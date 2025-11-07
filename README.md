@@ -83,8 +83,14 @@ python src/main.py
 ### Search Parameters
 
 - `SEARCH_TERMS`: Comma-separated keywords (e.g., "internship,stage,intern")
-- `LOCATIONS`: Comma-separated locations (e.g., "Morocco,Remote")
+- `LOCATIONS`: Comma-separated locations (e.g., "morocco,Remote")
 - `RESULTS_WANTED`: Maximum number of results per search
+
+### Supported Countries
+
+When configuring `LOCATIONS`, use these supported country names (case-insensitive):
+
+`argentina`, `australia`, `austria`, `bahrain`, `bangladesh`, `belgium`, `bulgaria`, `brazil`, `canada`, `chile`, `china`, `colombia`, `costa rica`, `croatia`, `cyprus`, `czech republic`, `czechia`, `denmark`, `ecuador`, `egypt`, `estonia`, `finland`, `france`, `germany`, `greece`, `hong kong`, `hungary`, `india`, `indonesia`, `ireland`, `israel`, `italy`, `japan`, `kuwait`, `latvia`, `lithuania`, `luxembourg`, `malaysia`, `malta`, `mexico`, `morocco`, `netherlands`, `new zealand`, `nigeria`, `norway`, `oman`, `pakistan`, `panama`, `peru`, `philippines`, `poland`, `portugal`, `qatar`, `romania`, `saudi arabia`, `singapore`, `slovakia`, `slovenia`, `south africa`, `south korea`, `spain`, `sweden`, `switzerland`, `taiwan`, `thailand`, `turkey`, `ukraine`, `united arab emirates`, `united kingdom`, `united states`, `uruguay`, `venezuela`, `vietnam`, `worldwide`, `remote`
 
 ### Notion Database Properties
 
