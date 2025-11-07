@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / compiled files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Editor/IDE files
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# Logs and temporary files
+*.log
+tmp/
+.coverage
+
+# Database files
+*.sqlite3
+db.sqlite3
+
+# Uploaded media (if applicable)
+media/
+
+# Configuration files that should not be committed
+config.ini
+.env

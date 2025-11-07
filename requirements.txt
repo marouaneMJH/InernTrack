@@ -1,0 +1,6 @@
+jobspy==0.31.0
+notion-client==2.7.0
+python-dotenv==1.0.0
+requests==2.31.0
+ujson==5.8.0
+beautifulsoup4==4.12.2

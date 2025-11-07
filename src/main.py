@@ -1,0 +1,66 @@
+from .logger_setup import get_logger
+from .config import settings
+from .jobspy_client import fetch_jobs
+from .normalizer import normalize_job
+from .dedupe import dedupe_by_url
+from .notion_client import NotionSync
+
+logger = get_logger("main", settings.LOG_LEVEL)
+
+def main():
+    logger.info("Start pipeline")
+    
+    # Validate required configuration
+    if not settings.NOTION_TOKEN:
+        logger.error("NOTION_TOKEN is required but not set")
+        return
+    
+    if not settings.DB_COMPANIES or not settings.DB_OFFERS:
+        logger.error("DB_COMPANIES_ID and DB_OFFERS_ID are required but not set")
+        return
+    
+    # Fetch raw jobs
+    raw_jobs = fetch_jobs()
+    logger.info("Raw jobs fetched: %d", len(raw_jobs))
+    
+    if not raw_jobs:
+        logger.warning("No jobs fetched, exiting")
+        return
+    
+    # Normalize and filter
+    normalized = [normalize_job(rj) for rj in raw_jobs if rj]
+    interns = [j for j in normalized if j.get("is_intern")]
+    logger.info("Filtered internships: %d", len(interns))
+    
+    # Deduplicate
+    unique = dedupe_by_url(interns)
+    logger.info("After dedupe: %d", len(unique))
+    
+    if not unique:
+        logger.info("No unique internship offers to process")
+        return
+
+    # Initialize Notion client
+    notion = NotionSync(settings.NOTION_TOKEN)
+
+    # Process each job
+    success_count = 0
+    for job in unique:
+        logger.info("Processing: %s - %s", job["company"], job["title"])
+        
+        if settings.DRY_RUN:
+            logger.info("[DRY RUN] Would ensure company and offer for: %s", job.get("url", "No URL"))
+            success_count += 1
+            continue
+        
+        try:
+            result = notion.ensure_company_and_offer(job)
+            if result:
+                success_count += 1
+        except Exception as e:
+            logger.exception("Failed to sync job: %s", e)
+    
+    logger.info("Pipeline completed. Successfully processed: %d/%d jobs", success_count, len(unique))
+
+if __name__ == "__main__":
+    main()
