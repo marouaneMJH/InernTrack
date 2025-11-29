@@ -34,7 +34,7 @@ from .config import settings
 from .jobspy_client import fetch_jobs
 from .normalizer import normalize_job
 from .dedupe import dedupe_by_url
-from .notion_client import NotionSync
+from .database_client import DatabaseClient
 import json
 
 logger = get_logger("main", settings.LOG_LEVEL)
@@ -42,13 +42,12 @@ logger = get_logger("main", settings.LOG_LEVEL)
 def main():
     logger.info("Start pipeline")
     
-    # Validate required configuration
-    if not settings.NOTION_TOKEN:
-        logger.error("NOTION_TOKEN is required but not set")
-        return
-    
-    if not settings.DB_COMPANIES or not settings.DB_OFFERS:
-        logger.error("DB_COMPANIES_ID and DB_OFFERS_ID are required but not set")
+    # Initialize database client
+    try:
+        db = DatabaseClient()
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}")
         return
     
     # Fetch raw jobs
@@ -85,7 +84,7 @@ def main():
         logger.info("Processing: %s - %s", job["company"], job["title"])
         
         if settings.DRY_RUN:
-            logger.info("[DRY RUN] Would ensure company and offer for: %s", job.get("url", "No URL"))
+            logger.info("[DRY RUN] Would create company and internship for: %s", job.get("url", "No URL"))
             success_count += 1
             continue
         
@@ -94,11 +93,20 @@ def main():
             pretty = json.dumps(job, indent=2, ensure_ascii=False, sort_keys=True)
             logger.info("Job details:\n%s", pretty)
 
-            result = notion.ensure_company_and_offer(job)
+            result = db.ensure_company_and_internship(job)
             if result:
                 success_count += 1
         except Exception as e:
             logger.exception("Failed to sync job: ")
+
+    # Show database statistics
+    try:
+        stats = db.get_stats()
+        logger.info("Database statistics:")
+        for table, count in stats.items():
+            logger.info(f"  {table}: {count} records")
+    except Exception as e:
+        logger.error(f"Failed to get database statistics: {e}")
 
     logger.info("Pipeline completed. Successfully processed: %d/%d jobs", success_count, len(unique))
 
