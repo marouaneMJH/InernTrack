@@ -23,13 +23,11 @@ class NotionSync:
                     "property": prop_name,
                     "rich_text": {"contains": prop_value}
                 }
-            
             # Use the request method directly
             query_body = {
                 "filter": filter_config,
                 "page_size": min(max_pages, 100)
             }
-            
             res = self.client.request(
                 path=f"databases/{db_id}/query",
                 method="POST",

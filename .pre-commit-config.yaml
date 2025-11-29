@@ -1,0 +1,10 @@
+repos:
+  # --- Gitleaks: Detect secrets before commit ---
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.1 # You can check latest tag: https://github.com/gitleaks/gitleaks/releases
+    hooks:
+      - id: gitleaks
+        name: Detect secrets and env leaks
+        entry: gitleaks protect --staged --verbose
+        language: system
+        pass_filenames: false
