@@ -1,6 +1,58 @@
 #!/usr/bin/env python3
 """
-Quick test script to verify the internship sync pipeline components.
+Component Testing Suite
+
+Comprehensive test suite for validating all components of the internship
+sync pipeline. This module provides thorough testing of individual
+components and their integration.
+
+Test Categories:
+
+1. Configuration Tests:
+   - Validates environment variable loading
+   - Checks required settings presence
+   - Verifies data type conversions
+
+2. Data Processing Tests:
+   - HTML cleaning functionality
+   - Job data normalization
+   - Type safety and error handling
+   - Edge case handling
+
+3. Notion Integration Tests:
+   - API connection validation
+   - Database access verification
+   - Upload functionality testing
+   - Error handling and recovery
+
+4. End-to-End Tests:
+   - Complete pipeline simulation
+   - Dry-run mode validation
+   - Real upload testing (optional)
+
+Test Features:
+- Automated test discovery and execution
+- Comprehensive error reporting
+- Mock data generation for testing
+- Integration with actual Notion API
+- Configurable test modes (dry-run vs real)
+
+Usage:
+    python __test__/test_components.py
+    
+Test Results:
+- ✅ indicates successful tests
+- ❌ indicates failed tests with detailed error information
+- ⚠️ indicates warnings or skipped tests
+
+Safety Features:
+- Dry-run mode prevents accidental data modification
+- Test data cleanup instructions
+- Unique identifiers for test entries
+- Rollback capabilities
+
+Author: El Moujahid Marouane
+Version: 1.0
 """
 
 import sys

@@ -1,10 +1,76 @@
 #!/usr/bin/env python3
 """
-Enhanced Notion test with better diagnostics and setup instructions.
+Notion Upload Functionality Test Suite
+
+Comprehensive testing suite specifically designed for validating
+Notion API upload functionality and database operations. Provides
+detailed diagnostics and setup guidance for Notion integration.
+
+Test Coverage:
+
+1. Configuration Validation:
+   - Environment variable presence
+   - API token validation
+   - Database ID verification
+   - Permission checking
+
+2. Database Access Tests:
+   - Connection establishment
+   - Query operation validation
+   - Property access verification
+   - Error handling validation
+
+3. Upload Functionality:
+   - Company creation testing
+   - Job offer creation testing
+   - Relationship management
+   - Data integrity validation
+
+4. Integration Diagnostics:
+   - Database sharing status
+   - Permission troubleshooting
+   - API error interpretation
+   - Setup guidance provision
+
+Diagnostic Features:
+- Detailed setup instructions
+- Common error resolution
+- Step-by-step configuration guide
+- Permission troubleshooting
+- Database schema validation
+
+Safety Measures:
+- Dry-run mode support
+- Test data identification
+- Cleanup instructions
+- Minimal data creation
+- Error recovery guidance
+
+Output Features:
+- Color-coded status indicators
+- Detailed error explanations
+- Configuration summaries
+- Next step recommendations
+- Troubleshooting tips
+
+Usage:
+    python __test__/notion_uploader_test.py
+    
+Prerequisites:
+- Notion integration created
+- Databases shared with integration
+- Environment variables configured
+- Network connectivity
+
+Author: El Moujahid Marouane
+Version: 1.0
 """
+
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__))
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+sys.path.insert(0, ROOT_DIR)
 
 from src.config import settings
 from src.notion_client import NotionSync

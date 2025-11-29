@@ -1,9 +1,41 @@
+#!/usr/bin/env python3
+"""
+Internship Sync - Main Pipeline Module
+
+This is the main entry point for the internship synchronization pipeline.
+It orchestrates the complete workflow:
+
+1. Fetches job listings from multiple sources using JobSpy
+2. Normalizes and filters internship-specific positions
+3. Removes duplicate entries
+4. Syncs data to Notion databases (companies and offers)
+
+The pipeline supports:
+- Multi-site scraping (LinkedIn, Indeed, Glassdoor)
+- Intelligent internship filtering using keyword detection
+- Dry-run mode for testing without actual Notion updates
+- Comprehensive logging and error handling
+
+Usage:
+    python -m src.main
+    
+Environment Variables:
+    NOTION_TOKEN: Required Notion integration token
+    DB_COMPANIES_ID: Companies database ID in Notion
+    DB_OFFERS_ID: Job offers database ID in Notion
+    DRY_RUN: Set to 'true' to test without uploading
+    
+Author: El Moujahid Marouane
+Version: 1.0
+"""
+
 from .logger_setup import get_logger
 from .config import settings
 from .jobspy_client import fetch_jobs
 from .normalizer import normalize_job
 from .dedupe import dedupe_by_url
 from .notion_client import NotionSync
+import json
 
 logger = get_logger("main", settings.LOG_LEVEL)
 
@@ -40,11 +72,15 @@ def main():
         logger.info("No unique internship offers to process")
         return
 
+
     # Initialize Notion client
     notion = NotionSync(settings.NOTION_TOKEN)
 
+    
+
     # Process each job
     success_count = 0
+
     for job in unique:
         logger.info("Processing: %s - %s", job["company"], job["title"])
         
@@ -54,12 +90,16 @@ def main():
             continue
         
         try:
+            
+            pretty = json.dumps(job, indent=2, ensure_ascii=False, sort_keys=True)
+            logger.info("Job details:\n%s", pretty)
+
             result = notion.ensure_company_and_offer(job)
             if result:
                 success_count += 1
         except Exception as e:
-            logger.exception("Failed to sync job: %s", e)
-    
+            logger.exception("Failed to sync job: ")
+
     logger.info("Pipeline completed. Successfully processed: %d/%d jobs", success_count, len(unique))
 
 if __name__ == "__main__":

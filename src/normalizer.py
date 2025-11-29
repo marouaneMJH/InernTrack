@@ -1,3 +1,54 @@
+#!/usr/bin/env python3
+"""
+Data Normalization Module
+
+This module handles data cleaning and standardization for job listings
+scraped from various sources. It ensures consistent data format across
+different job boards and platforms.
+
+Key Responsibilities:
+
+1. HTML Cleaning:
+   - Removes HTML tags from job descriptions
+   - Converts HTML entities to plain text
+   - Preserves text structure with proper spacing
+   - Handles malformed HTML gracefully
+
+2. Data Type Normalization:
+   - Converts various data types (float, int, None) to strings
+   - Handles missing or empty fields with sensible defaults
+   - Ensures consistent string formatting
+
+3. Internship Detection:
+   - Uses regex patterns to identify internship positions
+   - Searches titles and descriptions for relevant keywords
+   - Supports multiple languages (English: internship, French: stage)
+   - Case-insensitive matching
+
+4. Field Mapping:
+   - Maps different field names from various job boards
+   - Standardizes field names across platforms
+   - Handles alternative field names (e.g., 'job_title' vs 'title')
+
+Data Quality Features:
+- Robust error handling for unexpected data types
+- Automatic text truncation to prevent overflow
+- Whitespace normalization
+- URL validation and cleaning
+
+Internship Detection Patterns:
+- Keywords: intern, internship, internee, stagiaire, stage
+- Word boundaries to prevent false matches
+- Multi-language support
+
+Usage:
+    normalized_job = normalize_job(raw_job_data)
+    clean_text = clean_html(html_string)
+    
+Author: El Moujahid Marouane
+Version: 1.0
+"""
+
 from bs4 import BeautifulSoup
 from .logger_setup import get_logger
 import re

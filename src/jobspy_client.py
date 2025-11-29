@@ -1,3 +1,50 @@
+#!/usr/bin/env python3
+"""
+JobSpy Integration Module
+
+This module provides job scraping functionality using the JobSpy library.
+It handles fetching job listings from multiple job boards with intelligent
+query generation and error handling.
+
+Supported Job Boards:
+- LinkedIn: Professional networking and job platform
+- Indeed: General job search platform
+- Glassdoor: Company reviews and job listings
+- Stack Overflow: Developer-focused job board
+
+Features:
+- Multi-platform scraping with concurrent requests
+- Configurable search terms and locations
+- Rate limiting and error recovery
+- Automatic retry logic for failed requests
+- Result aggregation and deduplication
+- Support for internship-specific filtering
+
+Configuration:
+The module uses settings from config.py:
+- SEARCH_TERMS: Keywords like 'internship', 'stage', 'intern'
+- LOCATIONS: Geographic locations to search
+- RESULTS_WANTED: Maximum results per search query
+
+Error Handling:
+- Graceful handling of invalid locations
+- Network timeout recovery
+- API rate limit management
+- Partial result collection on failures
+
+Data Format:
+Returns standardized job objects with fields:
+- title, company, location, url, description, posted_date
+- Raw data preserved for debugging
+
+Usage:
+    jobs = fetch_jobs()
+    print(f"Found {len(jobs)} job listings")
+    
+Author: El Moujahid Marouane
+Version: 1.0
+"""
+
 from jobspy import scrape_jobs   # si le package diffère, adapte l'import
 from .logger_setup import get_logger
 from .config import settings

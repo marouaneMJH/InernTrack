@@ -1,3 +1,37 @@
+#!/usr/bin/env python3
+"""
+Configuration Management Module
+
+This module handles all configuration settings for the internship sync pipeline.
+It loads environment variables from .env files and provides a centralized
+Settings class for accessing configuration throughout the application.
+
+Configuration Categories:
+
+1. Notion API Settings:
+   - NOTION_TOKEN: Authentication token for Notion API
+   - Database IDs for companies, offers, applications, contacts, documents
+
+2. Job Scraping Settings:
+   - SEARCH_TERMS: Keywords to search for (comma-separated)
+   - LOCATIONS: Geographic locations to search (comma-separated)
+   - RESULTS_WANTED: Maximum results per search query
+
+3. Application Behavior:
+   - DRY_RUN: Boolean flag for testing mode
+   - LOG_LEVEL: Logging verbosity level
+
+The settings are loaded automatically when the module is imported,
+making configuration available as `settings.PROPERTY_NAME`.
+
+Example:
+    from src.config import settings
+    print(f"Dry run mode: {settings.DRY_RUN}")
+    
+Author: El Moujahid Marouane
+Version: 1.0
+"""
+
 import os
 from dotenv import load_dotenv
 
