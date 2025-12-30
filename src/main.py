@@ -90,7 +90,8 @@ class Pipeline:
             logger.info("[DRY RUN] Would create company and internship for: %s", job.get("url", "No URL"))
             return True
 
-        pretty = json.dumps(job, indent=2, ensure_ascii=False, sort_keys=True)
+        # Use `default=str` so non-JSON types (e.g., date) serialize safely
+        pretty = json.dumps(job, indent=2, ensure_ascii=False, sort_keys=True, default=str)
         logger.info("Job details:\n%s", pretty)
 
         self.append_job_csv(job)
@@ -116,7 +117,8 @@ class Pipeline:
                 if write_header:
                     writer.writeheader()
 
-                row = {k: (job.get(k) if job.get(k) is not None else "") for k in fields}
+                # Ensure all values are strings for CSV writing
+                row = {k: ("" if job.get(k) is None else str(job.get(k))) for k in fields}
                 writer.writerow(row)
 
             logger.info("Appended job to CSV: %s", csv_path)
