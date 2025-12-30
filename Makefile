@@ -4,6 +4,6 @@
 all:
 	@./scripts/run.sh
 
-run:
+dev:
 	@echo "Running internship sync pipeline..."
 	@python -m src.main

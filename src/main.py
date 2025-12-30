@@ -39,6 +39,8 @@ import json
 
 logger = get_logger("main", settings.LOG_LEVEL)
 
+
+
 def main():
     logger.info("Start pipeline")
     
@@ -71,11 +73,6 @@ def main():
         logger.info("No unique internship offers to process")
         return
 
-
-    # Initialize Notion client
-    notion = NotionSync(settings.NOTION_TOKEN)
-
-    
 
     # Process each job
     success_count = 0

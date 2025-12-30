@@ -31,3 +31,8 @@ media/
 # Configuration files that should not be committed
 config.ini
 .env
+
+
+/data
+
+*.db

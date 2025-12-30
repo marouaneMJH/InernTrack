@@ -41,8 +41,11 @@ class Settings:
     # Database configuration
     DATABASE_PATH = os.getenv("DATABASE_PATH", "data/internship_sync.db")
     
+    
     # JobSpy / Scraper settings
+    SEARCH_TERMS = os.getenv("SEARCH_TERMS").split(",")
     LOCATIONS = os.getenv("LOCATIONS", "Morocco").split(",")
+    SITE_NAMES = os.getenv("SITE_NAMES").split(",")
     RESULTS_WANTED = int(os.getenv("RESULTS_WANTED", "50"))
     DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
