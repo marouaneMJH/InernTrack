@@ -333,7 +333,7 @@ class DatabaseClient:
             cursor = conn.cursor()
             base = (
                 "SELECT internships.id, internships.title, internships.description, "
-                "internships.location, internships.url, internships.status, interns.created_at, companies.name as company "
+                "internships.location, internships.url, internships.status, internships.created_at, companies.name as company "
                 "FROM internships LEFT JOIN companies ON internships.company_id = companies.id"
             )
             params = []
