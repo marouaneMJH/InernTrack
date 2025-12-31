@@ -26,6 +26,7 @@ Author: El Moujahid Marouane
 Version: 1.0
 """
 
+# TODO: immigrate to pg server 
 import sqlite3
 import os
 from datetime import datetime
@@ -320,15 +321,15 @@ class DatabaseClient:
             
             return stats
 
-    def list_internships(self, search: str | None = None, limit: int = 50, offset: int = 0):
+    def list_internships(self, search: str | None = None, limit: int = 25, offset: int = 0):
         """Return a list of internships joined with company name.
-
         Parameters:
         - search: optional text to search in title, company or location
         - limit, offset: pagination
 
         Returns: list of dict rows
         """
+    
         with self.get_connection() as conn:
             cursor = conn.cursor()
             base = (
@@ -342,8 +343,8 @@ class DatabaseClient:
                 q = f"%{search}%"
                 params.extend([q, q, q])
 
-            base += " ORDER BY internships.created_at DESC LIMIT ? OFFSET ?"
-            params.extend([limit, offset])
+            # base += " ORDER BY internships.created_at DESC LIMIT ? OFFSET ?"
+            # params.extend([limit, offset])
 
             cursor.execute(base, params)
             rows = cursor.fetchall()
