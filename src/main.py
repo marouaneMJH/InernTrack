@@ -94,7 +94,6 @@ class Pipeline:
         pretty = json.dumps(job, indent=2, ensure_ascii=False, sort_keys=True, default=str)
         logger.info("Job details:\n%s", pretty)
 
-        self.append_job_csv(job)
         result = self.db.ensure_company_and_internship(job)
         return bool(result)
 

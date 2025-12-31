@@ -348,6 +348,36 @@ class DatabaseClient:
             cursor.execute(base, params)
             rows = cursor.fetchall()
             return [dict(r) for r in rows]
+
+    def list_companies(self, search: str | None = None, industry: str | None = None,
+                       country: str | None = None, limit: int = 50, offset: int = 0):
+        """Return a paginated list of companies with optional filters."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            base = ("SELECT id, name, website, industry, country, description, created_at "
+                    "FROM companies")
+            params = []
+            clauses = []
+            if search:
+                clauses.append("(name LIKE ? OR description LIKE ?)")
+                q = f"%{search}%"
+                params.extend([q, q])
+            if industry:
+                clauses.append("industry = ?")
+                params.append(industry)
+            if country:
+                clauses.append("country = ?")
+                params.append(country)
+
+            if clauses:
+                base += " WHERE " + " AND ".join(clauses)
+
+            base += " ORDER BY created_at DESC LIMIT ? OFFSET ?"
+            params.extend([limit, offset])
+
+            cursor.execute(base, params)
+            rows = cursor.fetchall()
+            return [dict(r) for r in rows]
     
     def close(self):
         """Close database connection (for cleanup)"""
