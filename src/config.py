@@ -277,13 +277,16 @@ class Settings:
             "site_name": cls.SITE_NAMES,  # Correct parameter name
             "results_wanted": cls.RESULTS_WANTED,
             "job_type": cls.JOB_TYPE,
-            "is_remote": cls.IS_REMOTE,
             "experience_level": cls.EXPERIENCE_LEVELS,  # Added this
             "country_indeed": cls.COUNTRY_INDEED,
             "linkedin_fetch_description": cls.LINKEDIN_FETCH_DESCRIPTION,
             "description_format": cls.DESCRIPTION_FORMAT,
             "verbose": cls.VERBOSE,
         }
+        
+        # Only include is_remote if explicitly set to True or False (not None)
+        if cls.IS_REMOTE is not None:
+            config["is_remote"] = cls.IS_REMOTE
         
         # Add optional parameters only if set
         if cls.HOURS_OLD is not None:
