@@ -149,17 +149,6 @@ class Settings:
     # ADVANCED SCRAPING OPTIONS
     # ============================================================================
     
-    MIN_SALARY: Optional[int] = (
-        int(os.getenv("MIN_SALARY")) 
-        if os.getenv("MIN_SALARY") and os.getenv("MIN_SALARY").strip() 
-        else None
-    )
-    
-    MAX_SALARY: Optional[int] = (
-        int(os.getenv("MAX_SALARY")) 
-        if os.getenv("MAX_SALARY") and os.getenv("MAX_SALARY").strip() 
-        else None
-    )
     
     EASY_APPLY: bool = os.getenv("EASY_APPLY", "false").lower().strip() == "true"
     
@@ -245,16 +234,6 @@ class Settings:
         if cls.HOURS_OLD is not None and cls.HOURS_OLD <= 0:
             errors.append("HOURS_OLD must be greater than 0 or None")
         
-        if cls.MIN_SALARY is not None and cls.MIN_SALARY < 0:
-            errors.append("MIN_SALARY cannot be negative")
-        
-        if cls.MAX_SALARY is not None and cls.MAX_SALARY < 0:
-            errors.append("MAX_SALARY cannot be negative")
-        
-        if (cls.MIN_SALARY is not None and cls.MAX_SALARY is not None and 
-            cls.MIN_SALARY > cls.MAX_SALARY):
-            errors.append("MIN_SALARY cannot be greater than MAX_SALARY")
-        
         # Validate log level
         valid_log_levels = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
         if cls.LOG_LEVEL not in valid_log_levels:
@@ -288,30 +267,27 @@ class Settings:
         """
         Get configuration dictionary for scrape_jobs function.
         
+        NOTE: search_term and location must be passed separately when calling scrape_jobs.
+        This method returns the base configuration that's common across all searches.
+        
         Returns:
             Dict[str, Any]: Configuration dictionary with all scraping parameters
         """
         config = {
+            "site_name": cls.SITE_NAMES,  # Correct parameter name
             "results_wanted": cls.RESULTS_WANTED,
-            "site_name": cls.SITE_NAMES,
             "job_type": cls.JOB_TYPE,
             "is_remote": cls.IS_REMOTE,
-            "experience_level": cls.EXPERIENCE_LEVELS,
+            "experience_level": cls.EXPERIENCE_LEVELS,  # Added this
             "country_indeed": cls.COUNTRY_INDEED,
-            "description_format": cls.DESCRIPTION_FORMAT,
             "linkedin_fetch_description": cls.LINKEDIN_FETCH_DESCRIPTION,
+            "description_format": cls.DESCRIPTION_FORMAT,
             "verbose": cls.VERBOSE,
         }
         
         # Add optional parameters only if set
         if cls.HOURS_OLD is not None:
             config["hours_old"] = cls.HOURS_OLD
-        
-        if cls.MIN_SALARY is not None:
-            config["min_salary"] = cls.MIN_SALARY
-        
-        if cls.MAX_SALARY is not None:
-            config["max_salary"] = cls.MAX_SALARY
         
         if cls.PROXY is not None:
             config["proxy"] = cls.PROXY
@@ -320,7 +296,8 @@ class Settings:
             config["easy_apply"] = cls.EASY_APPLY
         
         return config
-    
+
+
     @classmethod
     def get_search_combinations_count(cls) -> int:
         """
