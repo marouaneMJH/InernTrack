@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, jsonify, send_file, curre
 from src.database_client import DatabaseClient
 import csv
 import io
+import os
 
 bp = Blueprint('main', __name__)
 
@@ -110,3 +111,74 @@ def export_internships():
 
     output.seek(0)
     return current_app.response_class(output.read(), mimetype='text/csv', headers={'Content-Disposition': 'attachment; filename=internships.csv'})
+
+
+@bp.route('/db')
+def db_status_page():
+    """Render a simple page showing database status and table counts."""
+    db = DatabaseClient()
+    stats = db.get_stats()
+
+    # file size
+    try:
+        db_file = db.db_path
+        file_size = os.path.getsize(db_file)
+    except Exception:
+        db_file = getattr(db, 'db_path', 'unknown')
+        file_size = None
+
+    # estimate using PRAGMA
+    page_count = None
+    page_size = None
+    try:
+        conn = db.get_connection()
+        cur = conn.cursor()
+        cur.execute('PRAGMA page_count')
+        page_count = cur.fetchone()[0]
+        cur.execute('PRAGMA page_size')
+        page_size = cur.fetchone()[0]
+        conn.close()
+    except Exception:
+        page_count = None
+        page_size = None
+
+    est_bytes = page_count * page_size if page_count and page_size else None
+
+    return render_template('db_status.html', stats=stats, db_file=db_file, file_size=file_size, page_count=page_count, page_size=page_size, est_bytes=est_bytes)
+
+
+@bp.route('/api/db_status')
+def api_db_status():
+    db = DatabaseClient()
+    stats = db.get_stats()
+    try:
+        db_file = db.db_path
+        file_size = os.path.getsize(db_file)
+    except Exception:
+        db_file = getattr(db, 'db_path', 'unknown')
+        file_size = None
+
+    page_count = None
+    page_size = None
+    try:
+        conn = db.get_connection()
+        cur = conn.cursor()
+        cur.execute('PRAGMA page_count')
+        page_count = cur.fetchone()[0]
+        cur.execute('PRAGMA page_size')
+        page_size = cur.fetchone()[0]
+        conn.close()
+    except Exception:
+        page_count = None
+        page_size = None
+
+    est_bytes = page_count * page_size if page_count and page_size else None
+
+    return jsonify({
+        'stats': stats,
+        'db_file': db_file,
+        'file_size': file_size,
+        'page_count': page_count,
+        'page_size': page_size,
+        'estimated_bytes': est_bytes
+    })
