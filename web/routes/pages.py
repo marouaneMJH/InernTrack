@@ -26,7 +26,6 @@ class PagesController(BaseController):
         self.bp.add_url_rule('/company/<int:company_id>', 'company_detail_page', self.company_detail_page)
         self.bp.add_url_rule('/db', 'db_status_page', self.db_status_page)
         self.bp.add_url_rule('/cv-generator', 'cv_generator_page', self.cv_generator_page)
-        self.bp.add_url_rule('/settings', 'settings_page', self.settings_page)
     
     def index(self):
         """Home page - redirects to internships."""
@@ -87,7 +86,3 @@ class PagesController(BaseController):
     def cv_generator_page(self):
         """CV and cover letter generator page."""
         return render_template('cv_generator.html')
-    
-    def settings_page(self):
-        """Settings page."""
-        return render_template('settings.html')

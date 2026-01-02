@@ -15,7 +15,6 @@ from src.cv_generator.services import (
     CVGeneratorFacade,
     ProfileService,
     MatchingService,
-    JobOffer,
 )
 
 
