@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+
+{% block title %}CV Generator - Internship Tracker{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="text-3xl font-bold mb-2">
+        <i class="fas fa-file-alt mr-2" style="color: var(--forest)"></i>
+        CV & Cover Letter Generator
+    </h1>
+    <p class="text-gray-600">Generate tailored CVs and cover letters for your internship applications</p>
+</div>
+
+<!-- Tab Navigation -->
+<div class="mb-6 border-b border-gray-200">
+    <nav class="flex space-x-4" aria-label="Tabs">
+        <button class="cv-tab active px-4 py-2 text-sm font-medium border-b-2 transition-colors" data-tab="profile">
+            <i class="fas fa-user mr-2"></i>Profile
+        </button>
+        <button class="cv-tab px-4 py-2 text-sm font-medium border-b-2 transition-colors" data-tab="generate">
+            <i class="fas fa-magic mr-2"></i>Generate
+        </button>
+        <button class="cv-tab px-4 py-2 text-sm font-medium border-b-2 transition-colors" data-tab="documents">
+            <i class="fas fa-folder-open mr-2"></i>Documents
+        </button>
+    </nav>
+</div>
+
+<!-- Profile Tab -->
+<div id="tab-profile" class="tab-content">
+    <!-- Personal Information -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+            <i class="fas fa-id-card mr-2" style="color: var(--sage)"></i>
+            Personal Information
+        </h2>
+        <form id="personalInfoForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="full_name">Full Name *</label>
+                <input type="text" id="full_name" name="full_name" required
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="John Doe">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="email">Email *</label>
+                <input type="email" id="email" name="email" required
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="john@example.com">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="+1 (555) 123-4567">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="location">Location</label>
+                <input type="text" id="location" name="location"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="San Francisco, CA">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="linkedin">LinkedIn URL</label>
+                <input type="url" id="linkedin" name="linkedin"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="https://linkedin.com/in/johndoe">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="github">GitHub URL</label>
+                <input type="url" id="github" name="github"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="https://github.com/johndoe">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="website">Website</label>
+                <input type="url" id="website" name="website"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="https://johndoe.com">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="summary">Professional Summary</label>
+                <textarea id="summary" name="summary" rows="3"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                    placeholder="Brief summary of your professional background and goals..."></textarea>
+            </div>
+            <div class="md:col-span-2 flex justify-end">
+                <button type="submit" class="btn-primary px-4 py-2 rounded-lg">
+                    <i class="fas fa-save mr-2"></i>Save Personal Info
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-code mr-2" style="color: var(--forest)"></i>
+                Skills
+            </h2>
+            <button type="button" id="addSkillBtn" class="btn-secondary px-3 py-1 rounded text-sm">
+                <i class="fas fa-plus mr-1"></i>Add Skill
+            </button>
+        </div>
+        <div id="skillsList" class="space-y-2">
+            <!-- Skills will be loaded here -->
+        </div>
+        <div id="noSkills" class="text-gray-500 text-center py-4 hidden">
+            <i class="fas fa-info-circle mr-2"></i>No skills added yet. Click "Add Skill" to get started.
+        </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-project-diagram mr-2" style="color: var(--sage)"></i>
+                Projects
+            </h2>
+            <button type="button" id="addProjectBtn" class="btn-secondary px-3 py-1 rounded text-sm">
+                <i class="fas fa-plus mr-1"></i>Add Project
+            </button>
+        </div>
+        <div id="projectsList" class="space-y-3">
+            <!-- Projects will be loaded here -->
+        </div>
+        <div id="noProjects" class="text-gray-500 text-center py-4 hidden">
+            <i class="fas fa-info-circle mr-2"></i>No projects added yet.
+        </div>
+    </div>
+
+    <!-- Education Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-graduation-cap mr-2" style="color: var(--forest)"></i>
+                Education
+            </h2>
+            <button type="button" id="addEducationBtn" class="btn-secondary px-3 py-1 rounded text-sm">
+                <i class="fas fa-plus mr-1"></i>Add Education
+            </button>
+        </div>
+        <div id="educationList" class="space-y-3">
+            <!-- Education will be loaded here -->
+        </div>
+        <div id="noEducation" class="text-gray-500 text-center py-4 hidden">
+            <i class="fas fa-info-circle mr-2"></i>No education entries added yet.
+        </div>
+    </div>
+
+    <!-- Experience Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-briefcase mr-2" style="color: var(--sage)"></i>
+                Experience
+            </h2>
+            <button type="button" id="addExperienceBtn" class="btn-secondary px-3 py-1 rounded text-sm">
+                <i class="fas fa-plus mr-1"></i>Add Experience
+            </button>
+        </div>
+        <div id="experienceList" class="space-y-3">
+            <!-- Experience will be loaded here -->
+        </div>
+        <div id="noExperience" class="text-gray-500 text-center py-4 hidden">
+            <i class="fas fa-info-circle mr-2"></i>No experience entries added yet.
+        </div>
+    </div>
+</div>
+
+<!-- Generate Tab -->
+<div id="tab-generate" class="tab-content hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Job Details Input -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-search mr-2" style="color: var(--forest)"></i>
+                Job Details
+            </h2>
+            <form id="generateForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="job_title">Job Title *</label>
+                    <input type="text" id="job_title" name="title" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                        placeholder="Software Engineering Intern">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="job_company">Company *</label>
+                    <input type="text" id="job_company" name="company" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                        placeholder="Google">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="job_location">Location</label>
+                    <input type="text" id="job_location" name="location"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                        placeholder="Mountain View, CA">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="job_description">Job Description *</label>
+                    <textarea id="job_description" name="description" rows="6" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                        placeholder="Paste the job description here..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="job_requirements">Requirements</label>
+                    <textarea id="job_requirements" name="requirements" rows="4"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                        placeholder="Key requirements from the job posting..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="job_skills">Skills (comma-separated)</label>
+                    <input type="text" id="job_skills" name="skills"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus-accent"
+                        placeholder="Python, JavaScript, React, SQL">
+                </div>
+
+                <!-- Generation Options -->
+                <div class="pt-4 border-t border-gray-200">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Generate:</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="gen_cv" checked class="mr-2 accent-emerald-600">
+                            <span>CV</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="gen_cover_letter" checked class="mr-2 accent-emerald-600">
+                            <span>Cover Letter</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="compile_pdf" checked class="mr-2 accent-emerald-600">
+                            <span>Compile PDF</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" id="analyzeMatchBtn" class="btn-secondary px-4 py-2 rounded-lg flex-1">
+                        <i class="fas fa-chart-bar mr-2"></i>Analyze Match
+                    </button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex-1">
+                        <i class="fas fa-magic mr-2"></i>Generate Documents
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Match Analysis & Preview -->
+        <div class="space-y-6">
+            <!-- Match Score -->
+            <div id="matchAnalysis" class="bg-white rounded-lg shadow-sm p-6 hidden">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-chart-pie mr-2" style="color: var(--sage)"></i>
+                    Match Analysis
+                </h2>
+                <div class="text-center mb-4">
+                    <div class="inline-block relative">
+                        <svg class="w-32 h-32" viewBox="0 0 36 36">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none" stroke="#e5e7eb" stroke-width="3"/>
+                            <path id="matchScoreCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none" stroke="var(--forest)" stroke-width="3" stroke-linecap="round"
+                                stroke-dasharray="0, 100"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="matchScoreValue" class="text-3xl font-bold">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="matchDetails" class="space-y-2">
+                    <!-- Match details will be populated here -->
+                </div>
+            </div>
+
+            <!-- Matched Skills -->
+            <div id="matchedSkillsSection" class="bg-white rounded-lg shadow-sm p-6 hidden">
+                <h3 class="text-lg font-semibold mb-3">
+                    <i class="fas fa-check-circle mr-2 text-green-500"></i>Matched Skills
+                </h3>
+                <div id="matchedSkillsList" class="flex flex-wrap gap-2">
+                    <!-- Matched skills tags -->
+                </div>
+            </div>
+
+            <!-- Missing Skills -->
+            <div id="missingSkillsSection" class="bg-white rounded-lg shadow-sm p-6 hidden">
+                <h3 class="text-lg font-semibold mb-3">
+                    <i class="fas fa-exclamation-circle mr-2 text-yellow-500"></i>Skills to Highlight
+                </h3>
+                <div id="missingSkillsList" class="flex flex-wrap gap-2">
+                    <!-- Missing skills tags -->
+                </div>
+            </div>
+
+            <!-- Generation Result -->
+            <div id="generationResult" class="bg-white rounded-lg shadow-sm p-6 hidden">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-check-circle mr-2 text-green-500"></i>
+                    Generation Complete
+                </h2>
+                <div id="generatedDocuments" class="space-y-3">
+                    <!-- Generated documents will be listed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Documents Tab -->
+<div id="tab-documents" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-history mr-2" style="color: var(--forest)"></i>
+                Generated Documents
+            </h2>
+            <button type="button" id="refreshDocsBtn" class="btn-secondary px-3 py-1 rounded text-sm">
+                <i class="fas fa-sync-alt mr-1"></i>Refresh
+            </button>
+        </div>
+        <div id="documentsList" class="space-y-3">
+            <!-- Documents will be loaded here -->
+        </div>
+        <div id="noDocuments" class="text-gray-500 text-center py-8 hidden">
+            <i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i>
+            <p>No documents generated yet.</p>
+            <p class="text-sm">Go to the Generate tab to create your first CV or cover letter.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adding/Editing Items -->
+<div id="itemModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="modalTitle" class="text-xl font-semibold"></h3>
+                <button type="button" id="closeModalBtn" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="modalForm">
+                <div id="modalFormContent">
+                    <!-- Form content will be injected here -->
+                </div>
+                <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+                    <button type="button" id="cancelModalBtn" class="btn-secondary px-4 py-2 rounded-lg">Cancel</button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-lg">
+                        <i class="fas fa-save mr-2"></i>Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/cv_generator.js') }}"></script>
+{% endblock %}

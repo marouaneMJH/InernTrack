@@ -1,0 +1,143 @@
+% CV Template - Modern Professional Style
+% Author: El Moujahid Marouane
+% Version: 1.0
+%
+% Placeholders:
+% {{NAME}}, {{EMAIL}}, {{PHONE}}, {{ADDRESS}}, {{LINKEDIN}}, {{GITHUB}}, {{PORTFOLIO}}
+% {{SUMMARY}}
+% {{SKILLS_SECTION}}
+% {{EXPERIENCE_SECTION}}
+% {{EDUCATION_SECTION}}
+% {{PROJECTS_SECTION}}
+% {{CERTIFICATIONS_SECTION}}
+% {{LANGUAGES_SECTION}}
+
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{parskip}
+
+% Colors
+\definecolor{primary}{RGB}{53, 94, 59}    % Forest green
+\definecolor{secondary}{RGB}{156, 175, 136} % Sage
+\definecolor{accent}{RGB}{70, 70, 70}     % Dark gray
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=primary,
+    pdftitle={CV - {{NAME}}},
+    pdfauthor={{NAME}}
+}
+
+% Section formatting
+\titleformat{\section}
+    {\Large\bfseries\color{primary}}
+    {}{0em}
+    {}
+    [\titlerule]
+
+\titleformat{\subsection}
+    {\large\bfseries\color{accent}}
+    {}{0em}
+    {}
+
+% Custom commands
+\newcommand{\cvsection}[1]{\section*{#1}}
+\newcommand{\cvsubsection}[1]{\subsection*{#1}}
+
+% Header
+\newcommand{\cvheader}[7]{
+    \begin{center}
+        {\Huge\bfseries\color{primary} #1}\\[0.3em]
+        \begin{tabular}{c c c}
+            \ifx&#2&\else\faEnvelope\ #2\fi &
+            \ifx&#3&\else\faPhone\ #3\fi &
+            \ifx&#4&\else\faMapMarker\ #4\fi
+        \end{tabular}\\[0.2em]
+        \begin{tabular}{c c c}
+            \ifx&#5&\else\faLinkedin\ \href{#5}{LinkedIn}\fi &
+            \ifx&#6&\else\faGithub\ \href{#6}{GitHub}\fi &
+            \ifx&#7&\else\faGlobe\ \href{#7}{Portfolio}\fi
+        \end{tabular}
+    \end{center}
+    \vspace{0.5em}
+}
+
+% Experience entry
+\newcommand{\experienceentry}[5]{
+    \textbf{#1} \hfill \textit{#2}\\
+    \textit{#3} \hfill #4
+    \begin{itemize}[leftmargin=*, nosep]
+        #5
+    \end{itemize}
+    \vspace{0.3em}
+}
+
+% Education entry
+\newcommand{\educationentry}[4]{
+    \textbf{#1}\\
+    \textit{#2} \hfill #3\\
+    #4
+    \vspace{0.3em}
+}
+
+% Project entry
+\newcommand{\projectentry}[4]{
+    \textbf{#1} \hfill \textit{#2}\\
+    #3\\
+    \textit{Technologies:} #4
+    \vspace{0.3em}
+}
+
+% Remove page numbers
+\pagenumbering{gobble}
+
+\begin{document}
+
+% Header
+\cvheader{{{NAME}}}{{{EMAIL}}}{{{PHONE}}}{{{ADDRESS}}}{{{LINKEDIN}}}{{{GITHUB}}}{{{PORTFOLIO}}}
+
+% Summary
+\cvsection{Professional Summary}
+{{SUMMARY}}
+
+% Skills
+\cvsection{Skills}
+{{SKILLS_SECTION}}
+
+% Experience
+\cvsection{Experience}
+{{EXPERIENCE_SECTION}}
+
+% Education
+\cvsection{Education}
+{{EDUCATION_SECTION}}
+
+% Projects
+\cvsection{Projects}
+{{PROJECTS_SECTION}}
+
+% Certifications (if any)
+{{#CERTIFICATIONS_SECTION}}
+\cvsection{Certifications}
+{{CERTIFICATIONS_SECTION}}
+{{/CERTIFICATIONS_SECTION}}
+
+% Languages (if any)
+{{#LANGUAGES_SECTION}}
+\cvsection{Languages}
+{{LANGUAGES_SECTION}}
+{{/LANGUAGES_SECTION}}
+
+\end{document}

@@ -1,0 +1,93 @@
+% Cover Letter Template - Modern Professional Style
+% Author: El Moujahid Marouane
+% Version: 1.0
+%
+% Placeholders:
+% {{SENDER_NAME}}, {{SENDER_EMAIL}}, {{SENDER_PHONE}}, {{SENDER_ADDRESS}}
+% {{COMPANY}}, {{POSITION}}, {{COMPANY_LOCATION}}
+% {{DATE}}
+% {{OPENING_PARAGRAPH}}
+% {{BODY_PARAGRAPHS}}
+% {{CLOSING_PARAGRAPH}}
+% {{SIGNATURE}}
+
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{parskip}
+
+% Colors
+\definecolor{primary}{RGB}{53, 94, 59}    % Forest green
+\definecolor{accent}{RGB}{70, 70, 70}     % Dark gray
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=primary,
+    pdftitle={Cover Letter - {{SENDER_NAME}}},
+    pdfauthor={{SENDER_NAME}}
+}
+
+% Remove page numbers
+\pagenumbering{gobble}
+
+\begin{document}
+
+% Sender Info (top right)
+\begin{flushright}
+    \textbf{\color{primary}{{SENDER_NAME}}}\\
+    {{SENDER_ADDRESS}}\\
+    \faEnvelope\ {{SENDER_EMAIL}}\\
+    \ifx\empty{{SENDER_PHONE}}\else\faPhone\ {{SENDER_PHONE}}\\\fi
+    \vspace{0.5em}
+    {{DATE}}
+\end{flushright}
+
+\vspace{1em}
+
+% Recipient Info
+\begin{flushleft}
+    \textbf{Hiring Manager}\\
+    {{COMPANY}}\\
+    {{COMPANY_LOCATION}}
+\end{flushleft}
+
+\vspace{0.5em}
+
+% Subject line
+\textbf{Re: Application for {{POSITION}} Position}
+
+\vspace{1em}
+
+% Salutation
+Dear Hiring Manager,
+
+\vspace{0.5em}
+
+% Opening paragraph
+{{OPENING_PARAGRAPH}}
+
+\vspace{0.5em}
+
+% Body paragraphs
+{{BODY_PARAGRAPHS}}
+
+\vspace{0.5em}
+
+% Closing paragraph
+{{CLOSING_PARAGRAPH}}
+
+\vspace{1.5em}
+
+% Signature
+{{SIGNATURE}}
+
+\end{document}
