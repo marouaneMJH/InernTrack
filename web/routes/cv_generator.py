@@ -325,7 +325,7 @@ class CVGeneratorController(BaseController):
         result = self.profile_service.add_education(
             institution=data['institution'],
             degree=data['degree'],
-            field=data.get('field', ''),
+            field_of_study=data.get('field', ''),
             start_date=data.get('start_date'),
             end_date=data.get('end_date'),
             gpa=data.get('gpa'),
@@ -368,13 +368,13 @@ class CVGeneratorController(BaseController):
         
         result = self.profile_service.add_experience(
             company=data['company'],
-            title=data['title'],
+            position=data['title'],
             start_date=data.get('start_date'),
             end_date=data.get('end_date'),
             is_current=data.get('is_current', False),
             description=data.get('description', ''),
             achievements=data.get('achievements', []),
-            technologies=data.get('technologies', []),
+            technologies_used=data.get('technologies', []),
             location=data.get('location'),
         )
         return self.service_to_response(result)
